@@ -1,0 +1,132 @@
+数据库类
+//持久连接问题xxx
+Db.php
+	__construct()
+		$cfg = require 'db.cfg.php';
+	connet()
+		new PDO ($dsn, $username, $password)
+		$pdo->query("set names $charset")
+	exeSql($sql, $args)
+	getObjs($sql, $args, $class='stdClass')			结果装成对象数组
+		$stat = $pdo->prepare($sql)
+		$stat->execute($args)
+		$rs [] = $stat->fetchObject ( $class )
+	close()
+		$pdo=null
+
+数据库配置文件
+db.cfg.php
+	return array(
+		'dsn' => "mysql:host=localhost;dbname=test",
+		'username' => 'test',
+		'passwd' => 'test',
+		'charset' => 'utf8',
+	);
+
+
+
+数据访问对象
+Dao.php
+	$userDao = new Dao('user');
+	get($id)					通过主键获取一个对象
+		$db->getObjs()
+	get('user', 'username')		通过指定字段获取一个对象
+		$obj->name;
+		delete?id=$obj->id		a删除
+			delete($_GET['id'])	删除action
+	add($_POST)					arr(字段=>值)	;数据验证问题xxx
+	add(字段s, 值s);
+	update($id, $_POST)
+	update($id, 字段s, 值s)
+	delete($id)
+	getPage(1, 10)				第n页，每页m条
+
+分页
+	$list = $page->objs;
+	$recordCount = $page->recordCount;
+	$pageCount = $page->pageCount;
+	$currentPage = $page->currentPage;
+
+
+'save|insert|update|get|select|delete'
+
+'ajax/save/user'
+{
+	id:1,
+	name:'wsf',
+}
+
+
+'ajax'
+{
+	pageIndex: 1,
+	pageSize: 30,
+	orderBy: 'id',
+	table: 'user',
+	where: {
+		id: 1
+	}
+}
+
+{
+	error:0,
+	msg:'成功',
+	page:1,
+	pageSize:10,
+	pageCount:100,
+	dataCount:1000,
+	data:{}||[],
+}
+
+'ajax'
+{
+	type: 'select',
+	table: 'user',
+	where: {
+		name: 'wsf',
+	},
+	pageIndex: 1,
+	pageSize: 100,
+	orderBy: 'id',
+
+	error: 0,
+	msg: '成功',
+	pageCount: 10,
+	dataCount: 1000,
+	data: [],
+}
+{
+	type: 'save',
+	table: 'user',
+	data: {
+		id: 1,
+		name: 'wsf',
+	},
+
+	error: 0,
+	msg: '成功',
+}
+{
+	type: 'insert',
+	table: 'user',
+	data: {
+		id: 1,
+		name: 'wsf',
+	},
+
+	error: 0,
+	msg: '成功',
+}
+{
+	type: 'update',
+	table: 'user',
+	where:{
+		id: 1,
+	},
+	data: {
+		name: 'wsf',
+	},
+
+	error: 0,
+	msg: '成功',
+}
